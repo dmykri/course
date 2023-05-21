@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>Адміністрування</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+      </style>
+</head>
+<style>
+    .navbar-expand-lg {
+    box-shadow: 0 0 20px rgba(33, 33, 33, 0.808);
+  }
+    #id_category {
+        width: 200px;
+        margin-right: 15px;
+    }
+    #id_feature_key_name {
+        width: 400px;
+        margin-right: 15px;
+    }
+    body {
+    height: 100%;
+    margin-top: 70px;
+    font-family: 'Rubik', sans-serif;   
+  }
+</style>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgb(142, 182, 0);">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'base' %}">KRYASHOP|АДМІНІСТРУВАННЯ</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <span class="navbar text text-light"> Привіт,
+                  <span class="badge badge-danger ">
+                    <a style="text-decoration: none; font-size: 14px; color: white;"
+                      href="{% url 'profile' %}">{{request.user.username}}
+                    </a>
+                  </span>
+                </span>
+              </li>
+              <li class="nav-item">
+                <span class="navbar text text-light">
+                  <a href="{% url 'logout' %}" style="text-decoration: none; color: white;"> Вийти</a>
+                </span>
+              </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                <a class="nav-link" href="/admin"><span class="badge badge-pill badge-danger">Адмін-панель</span></a>
+                </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+<h3 class="text-center">Адміністрування магазину KRYASHOP</h3>
+<hr>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="row">
+    <div class="col-md-4">
+<div class="list-group">
+    <a href="{% url 'new-category' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-category/' %}active{% endif %}" aria-current="true">
+    Створити нову категорію
+  </a>
+  <a href="{% url 'new-brand' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-brand/' %}active{% endif %}" aria-current="true">
+    Додати бренд
+  </a>
+  <a href="{% url 'new-product' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-product/' %}active{% endif %}" aria-current="true">
+    Додати новий товар
+  </a>
+  <br>
+  <a href="{% url 'new-feature' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-feature/' %}active{% endif %}" aria-current="true">
+    Створити нову характеристику
+  </a>
+    <a href="{% url 'new-validator' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-validator/' %}active{% endif %}" aria-current="true">
+    Створити значення характеристики
+  </a>
+    <a href="{% url 'new-product-feature' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-product-feature/' %}active{% endif %}" aria-current="true">
+    Створити характеристику для товару
+    <a href="{% url 'update-product-features' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/update-product-features/' %}active{% endif %}" aria-current="true">
+    Редагувати характеристики товару
+  </a>
+  <br>
+  <a href="{% url 'orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/orders/' %}active{% endif %}" aria-current="true">
+    Усі замовлення
+  </a>
+  <a href="{% url 'new-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-orders/' %}active{% endif %}" aria-current="true">
+    Нові замовлення
+  </a>
+  <a href="{% url 'in-progress-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/in-progress-orders/' %}active{% endif %}" aria-current="true">
+    В роботі замовлення
+  </a>
+  <a href="{% url 'ready-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/ready-orders/' %}active{% endif %}" aria-current="true">
+    Готові/відправленні замовлення
+  </a>
+  <a href="{% url 'completed-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/completed-orders/' %}active{% endif %}" aria-current="true">
+    Завершені замовлення
+  </a>
+</div>
+    </div>
+    <div class="col-md-8">
+    {% block content %}
+    {% endblock %}
+
+    </div>
+</div>
+{% block productfeaturesupdate %}
+{% endblock productfeaturesupdate %}
+{% block massfeatures %}
+{% endblock %}
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+{% block js %}
+<script>
+        $('select[name="category-validators"]').on('change', function() {
+        var categoryId = this.value;
+        data = {
+            category_id: categoryId
+        }
+        prev_choice = categoryId
+        $(".feature-validator-div").empty()
+        $(".feature-value-div").empty()
+        $(".errors").empty()
+        $.ajax({
+            method: "GET",
+            dataType: "json",
+            data: data,
+            url: "/administration/feature-choice/",
+            success: function(data){
+                $(".feature-validator-div").css('display', 'block');
+                $(".feature-validator-div").append(data['result'])
+            }
+        })
+    });
+    $(document).on('change', 'select[name="feature-validators"]', function(){
+        $('.feature-value-div').empty()
+        $('.errors').empty()
+        $('.feature-value-div').append(
+            '<input type="text" class="form-control" id="feature-value" required></input>',
+            '<br>',
+            '<input type="submit" class="btn btn-success" id="create-validator" value="Створити">'
+        )
+    })
+</script>
+<script>
+    $(document).on('click', '#create-validator', function (){
+        var catgoryId = $("#category-validators-id").val();
+        var featureName = $("#feature-validators-id").val();
+        var featureValue = $("#feature-value").val()
+        data = {
+            category_id: catgoryId,
+            feature_name: featureName,
+            feature_value: featureValue
+        }
+        $.ajax({
+            method: "GET",
+            dataType: "json",
+            data:data,
+            url: "/administration/feature-create/",
+            success: function (data){
+                if('error' in data){
+                    $('.errors').append(
+                        '<p class="text-center" style="color:red;"><strong>' + data['error'] + '</strong></p>'
+                    )
+                }else{
+                    console.log('Невдача')
+                    window.location.href="/administration/"
+                }
+            }
+        })
+    })
+</script>
+
+{% endblock js %}
+
+</body>
+</html>

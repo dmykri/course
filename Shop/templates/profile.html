@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+<div class="col-md-12" style="margin-top: 30px; margin-bottom: 30px;">
+  <div class="col-lg-6 col-md-6 mb-4 text-center" style="margin: 0 auto;">
+    <form action="{% url 'edit_customer' %}" method="POST">
+        {{edit_customer_form|crispy}}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-warning btn-block mb-3" style="margin-bottom: 15px; margin-top: 15px;" value="Підтвердити">
+      </form>
+    </div>
+</div>
+
+<h3 class="text-center mt-3 mb-3">Замовлення покупця {{request.user.username}}</h3>
+
+{% if not orders.count %}
+
+<div class="col-md-12" style="margin-top: 300px; margin-bottom: 300px;">
+    <h5 class="text-center mt-3 mb-3">
+        На жаль ви ще не створювали замовлення! Але це ще не пізно виправити:) 
+    </h5>
+    <h5 class="text-center mt-3 mb-3">
+        <a href="{% url 'base' %}">
+            Почати створювати покупки!
+        </a>
+    </h5>
+</div>
+
+{% else %}
+
+<div class="col-md-12">
+
+    <div class="row">
+
+    {% for order in orders %}
+    <div class="col-lg-4 col-md-6 mb-4">
+    <div class="card h-100 product" >
+        <div class="card-body">
+          <h5 class="card-title">Замовлення №{{order.id}}</h5>
+          <h6 class="card-subtitle mb-2">{{order.cart.final_price}} грн.</h6>
+          <p>
+          {% for item in order.cart.products.all %}
+                            <li>{{item.product.title}} x {{item.qty}}</li>
+          {% endfor %}
+          </p>
+          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modal-{{order.id}}">Інфо</button>
+                    <div class="modal fade" id="modal-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Замовлення {{order.id}}</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                
+                            </div>
+                            <div class="modal-body">
+                              <table class="table" style="font-size: 11px;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Назва</th>
+                                        <th scope="col">Фото</th>
+                                        <th scope="col">Ціна</th>
+                                        <th scope="col">Кількість</th>
+                                        <th scope="col">Заг. ціна</th>
+                                      </tr>
+                                </thead>  
+                                <tbody>
+                                    {% for item in order.cart.products.all %}
+                                        <tr>
+                                            <th scope="row">{{ item.product.title }}</th>
+                                            <td class="w-25"><img src="{{ item.product.image.url }}" class="img-fluid"></td>
+                                            <td>{{ item.product.price }} грн.</td>
+                                            <td>{{ item.qty }}</td>
+                                            <td>{{ item.final_price }} грн.</td>
+                                        </tr>
+                                    {% endfor %}
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td>Всього:</td>
+                                            <td>{{ order.cart.total_products }}</td>
+                                            <td><strong>{{ order.cart.final_price }} грн.</strong></td>
+                                        </tr>     
+                                </tbody>
+                              </table>
+                              <h4 class="text-center">Інші деталі</h4>
+                              <p>Ім'я: <strong>{{order.first_name}}</strong></p>
+                              <p>Прізвище: <strong>{{order.last_name}}</strong></p>
+                              <p>Телефон: <strong>{{order.phone}}</strong></p>
+                              <p>Адреса: <strong>{{order.address}}</strong></p>
+                              <p>Статус замовлення: <strong>{{order.get_status_display}}</strong></p>
+                              <p>Орієнтована дата доставки: <strong>{{order.order_date}}</strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+        </div>
+      </div>
+      </div>
+    {%endfor%}
+
+</div>
+</div>
+
+
+{% endif %}
+
+{% endblock %}
